@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessible Fractions Learning | NCERT Mathematics</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome for accessibility icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Add screen reader-specific meta tags -->
+    <meta name="description" content="NCERT Class 4 Fractions learning module with accessibility features for visually impaired and deaf students">
+</head>
+<body>
+    <div class="skip-link">
+        <a href="#main-content" class="visually-hidden">Skip to main content</a>
+    </div>
+
+    <header role="banner">
+        <div class="container">
+            <h1>Fractions</h1>
+            <p class="subheading">NCERT Class 4 Mathematics</p>
+            
+            <nav role="navigation" aria-label="Main Navigation">
+                <ul class="nav-list">
+                    <li><a href="#introduction" class="nav-link">Introduction</a></li>
+                    <li><a href="#understanding-fractions" class="nav-link">Understanding Fractions</a></li>
+                    <li><a href="#types-of-fractions" class="nav-link">Types of Fractions</a></li>
+                    <li><a href="#comparing-fractions" class="nav-link">Comparing Fractions</a></li>
+                    <li><a href="#operations" class="nav-link">Operations</a></li>
+                    <li><a href="#real-life" class="nav-link">Real-Life Examples</a></li>
+                </ul>
+            </nav>
+            
+            <div class="accessibility-panel">
+                <button id="fontIncrease" aria-label="Increase Font Size">
+                    <i class="fas fa-text-height" aria-hidden="true"></i>
+                </button>
+                <button id="highContrast" aria-label="Toggle High Contrast">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </button>
+                <button id="readAloud" aria-label="Read Aloud">
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                </button>
+                <button id="pauseReading" aria-label="Pause Reading">
+                    <i class="fas fa-pause" aria-hidden="true"></i>
+                </button>
+                <button id="openAssistant" aria-label="Open Math Assistant">
+                    <i class="fas fa-robot" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <div class="voice-control-status" id="voiceStatus" aria-live="polite">
+        <span class="status-icon"><i class="fas fa-microphone" aria-hidden="true"></i></span>
+        <span class="status-text">Voice Assistant: Ready</span>
+    </div>
+    
+    <div class="assistant-panel" id="mathAssistant">
+        <div class="assistant-header">
+            <h3>Math Assistant</h3>
+            <button class="close-btn" id="closeAssistant" aria-label="Close Assistant">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="assistant-messages" id="assistantMessages" aria-live="polite">
+            <div class="assistant-message">
+                <p>I'm your math assistant. How can I help you with fractions today?</p>
+            </div>
+        </div>
+        <div class="assistant-input">
+            <input type="text" id="assistantInput" placeholder="Type or speak your question..." aria-label="Enter your question">
+            <button id="sendAssistantMsg" aria-label="Send message">
+                <i class="fas fa-paper-plane" aria-hidden="true"></i>
+            </button>
+            <button id="voiceInputAssistant" aria-label="Voice input">
+                <i class="fas fa-microphone" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    <main id="main-content" role="main">
+        <div class="container">
+            <section id="introduction" class="content-section" tabindex="0" aria-labelledby="intro-heading">
+                <h2 id="intro-heading">Introduction to Fractions</h2>
+                <p>Welcome to our accessible learning module on fractions. This module is designed according to NCERT Class 4 Mathematics standards to help all students, including those with visual or hearing impairments, understand the concept of fractions.</p>
+                
+                <div class="info-box">
+                    <h3>Learning Objectives</h3>
+                    <ul>
+                        <li>Understand what fractions are and how they represent parts of a whole</li>
+                        <li>Identify different types of fractions</li>
+                        <li>Compare fractions with the same denominator</li>
+                        <li>Learn basic operations with fractions</li>
+                        <li>Apply fractions to everyday situations</li>
+                    </ul>
+                </div>
+                
+                <div class="navigation-help">
+                    <h3>Voice Navigation Help</h3>
+                    <p>You can navigate this module using voice commands. Here are some commands you can use:</p>
+                    <ul>
+                        <li>"Next section" - Move to the next section</li>
+                        <li>"Previous section" - Move to the previous section</li>
+                        <li>"Read this" - Read the current section</li>
+                        <li>"Stop reading" - Stop the voice narration</li>
+                        <li>"Open assistant" - Open the math assistant</li>
+                        <li>"Go to [section name]" - Navigate to a specific section</li>
+                    </ul>
+                    <p>Say "Help" at any time to hear these commands again.</p>
+                </div>
+            </section>
+            
+            <section id="understanding-fractions" class="content-section" tabindex="0" aria-labelledby="understanding-heading">
+                <h2 id="understanding-heading">Understanding Fractions</h2>
+                
+                <p>A fraction represents a part of a whole. When we divide something into equal parts, each part is a fraction of the whole.</p>
+                
+                <div class="fraction-visual" role="img" aria-label="Fraction representation showing 1/4 shaded out of a whole square">
+                    <div class="fraction-grid fraction-grid-4">
+                        <div class="fraction-cell fraction-shaded"></div>
+                        <div class="fraction-cell"></div>
+                        <div class="fraction-cell"></div>
+                        <div class="fraction-cell"></div>
+                    </div>
+                    <p class="fraction-caption">1/4 (one-fourth) of the square is shaded</p>
+                </div>
+                
+                <div class="definition-box">
+                    <h3>Parts of a Fraction</h3>
+                    <p>A fraction has two parts:</p>
+                    <ul>
+                        <li><strong>Numerator</strong>: The number on the top. It tells how many parts we are talking about.</li>
+                        <li><strong>Denominator</strong>: The number on the bottom. It tells how many equal parts the whole is divided into.</li>
+                    </ul>
+                    <div class="fraction-example">
+                        <span class="numerator">3</span>
+                        <span class="fraction-line" aria-hidden="true"></span>
+                        <span class="denominator">4</span>
+                    </div>
+                    <p class="fraction-reading">This is read as "three-fourths" or "three quarters"</p>
+                </div>
+                
+                <p>In our daily life, we use fractions all the time:</p>
+                <ul>
+                    <li>When we cut a roti into 2 equal pieces, each piece is 1/2 (one-half) of the roti</li>
+                    <li>When we share a chocolate bar with 3 friends equally, each one gets 1/4 (one-fourth) of the chocolate</li>
+                    <li>Half an hour (30 minutes) is 1/2 of an hour</li>
+                </ul>
+            </section>
+            
+            <section id="types-of-fractions" class="content-section" tabindex="0" aria-labelledby="types-heading">
+                <h2 id="types-heading">Types of Fractions</h2>
+                
+                <div class="fraction-types">
+                    <div class="fraction-type">
+                        <h3>Proper Fractions</h3>
+                        <p>The numerator is less than the denominator.</p>
+                        <div class="fraction-example">
+                            <span class="numerator">2</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">5</span>
+                        </div>
+                        <p>These represent less than one whole thing.</p>
+                    </div>
+                    
+                    <div class="fraction-type">
+                        <h3>Improper Fractions</h3>
+                        <p>The numerator is greater than or equal to the denominator.</p>
+                        <div class="fraction-example">
+                            <span class="numerator">7</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">4</span>
+                        </div>
+                        <p>These represent one or more than one whole thing.</p>
+                    </div>
+                    
+                    <div class="fraction-type">
+                        <h3>Mixed Fractions</h3>
+                        <p>Combination of a whole number and a proper fraction.</p>
+                        <div class="mixed-fraction-example">
+                            <span class="whole-number">1</span>
+                            <div class="fraction-part">
+                                <span class="numerator">3</span>
+                                <span class="fraction-line" aria-hidden="true"></span>
+                                <span class="denominator">4</span>
+                            </div>
+                        </div>
+                        <p>This represents one whole plus three-fourths.</p>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <h3>Converting Between Types</h3>
+                    <h4>Improper to Mixed Fraction:</h4>
+                    <ol>
+                        <li>Divide the numerator by the denominator</li>
+                        <li>The quotient becomes the whole number part</li>
+                        <li>The remainder becomes the new numerator</li>
+                        <li>Keep the denominator the same</li>
+                    </ol>
+                    <p>Example: 7/4 = 1 3/4 (7 ÷ 4 = 1 with remainder 3)</p>
+                    
+                    <h4>Mixed to Improper Fraction:</h4>
+                    <ol>
+                        <li>Multiply the whole number by the denominator</li>
+                        <li>Add the numerator to this product</li>
+                        <li>Put this sum over the original denominator</li>
+                    </ol>
+                    <p>Example: 1 3/4 = 7/4 (1 × 4 + 3 = 7, so 7/4)</p>
+                </div>
+            </section>
+            
+            <section id="comparing-fractions" class="content-section" tabindex="0" aria-labelledby="comparing-heading">
+                <h2 id="comparing-heading">Comparing Fractions</h2>
+                
+                <div class="info-box">
+                    <h3>Same Denominators</h3>
+                    <p>When fractions have the same denominator, the one with the larger numerator is greater.</p>
+                    <div class="comparison-example">
+                        <div class="fraction-example">
+                            <span class="numerator">2</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">5</span>
+                        </div>
+                        <span class="comparison-symbol">&lt;</span>
+                        <div class="fraction-example">
+                            <span class="numerator">3</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">5</span>
+                        </div>
+                    </div>
+                    <p>2/5 is less than 3/5 because 2 is less than 3</p>
+                </div>
+                
+                <div class="fraction-visual comparison-visual" role="img" aria-label="Visual comparison of fractions 2/5 and 3/5">
+                    <div class="comparison-row">
+                        <div class="fraction-grid fraction-grid-5">
+                            <div class="fraction-cell fraction-shaded"></div>
+                            <div class="fraction-cell fraction-shaded"></div>
+                            <div class="fraction-cell"></div>
+                            <div class="fraction-cell"></div>
+                            <div class="fraction-cell"></div>
+                        </div>
+                        <p class="fraction-caption">2/5 (two-fifths)</p>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="fraction-grid fraction-grid-5">
+                            <div class="fraction-cell fraction-shaded"></div>
+                            <div class="fraction-cell fraction-shaded"></div>
+                            <div class="fraction-cell fraction-shaded"></div>
+                            <div class="fraction-cell"></div>
+                            <div class="fraction-cell"></div>
+                        </div>
+                        <p class="fraction-caption">3/5 (three-fifths)</p>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <h3>Equivalent Fractions</h3>
+                    <p>Different fractions can represent the same amount. These are called equivalent fractions.</p>
+                    <div class="equivalent-example">
+                        <div class="fraction-example">
+                            <span class="numerator">1</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">2</span>
+                        </div>
+                        <span class="equals-symbol">=</span>
+                        <div class="fraction-example">
+                            <span class="numerator">2</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">4</span>
+                        </div>
+                        <span class="equals-symbol">=</span>
+                        <div class="fraction-example">
+                            <span class="numerator">3</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">6</span>
+                        </div>
+                    </div>
+                    <p>To find equivalent fractions, multiply or divide both the numerator and denominator by the same number.</p>
+                </div>
+            </section>
+            
+            <section id="operations" class="content-section" tabindex="0" aria-labelledby="operations-heading">
+                <h2 id="operations-heading">Operations with Fractions</h2>
+                
+                <div class="operation-box">
+                    <h3>Adding Fractions with Same Denominator</h3>
+                    <p>When adding fractions with the same denominator:</p>
+                    <ol>
+                        <li>Add the numerators</li>
+                        <li>Keep the denominator the same</li>
+                        <li>Simplify if needed</li>
+                    </ol>
+                    <div class="operation-example">
+                        <div class="fraction-example">
+                            <span class="numerator">1</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">4</span>
+                        </div>
+                        <span class="operation-symbol">+</span>
+                        <div class="fraction-example">
+                            <span class="numerator">2</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">4</span>
+                        </div>
+                        <span class="equals-symbol">=</span>
+                        <div class="fraction-example">
+                            <span class="numerator">3</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">4</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="fraction-visual" role="img" aria-label="Visual representation of adding 1/4 and 2/4 to get 3/4">
+                    <div class="addition-visual">
+                        <div class="fraction-grid fraction-grid-4">
+                            <div class="fraction-cell fraction-shaded"></div>
+                            <div class="fraction-cell"></div>
+                            <div class="fraction-cell"></div>
+                            <div class="fraction-cell"></div>
+                        </div>
+                        <span class="operation-symbol">+</span>
+                        <div class="fraction-grid fraction-grid-4">
+                            <div class="fraction-cell fraction-shaded"></div>
+                            <div class="fraction-cell fraction-shaded"></div>
+                            <div class="fraction-cell"></div>
+                            <div class="fraction-cell"></div>
+                        </div>
+                        <span class="equals-symbol">=</span>
+                        <div class="fraction-grid fraction-grid-4">
+                            <div class="fraction-cell fraction-shaded"></div>
+                            <div class="fraction-cell fraction-shaded"></div>
+                            <div class="fraction-cell fraction-shaded"></div>
+                            <div class="fraction-cell"></div>
+                        </div>
+                    </div>
+                    <p class="fraction-caption">1/4 + 2/4 = 3/4</p>
+                </div>
+                
+                <div class="operation-box">
+                    <h3>Adding Fractions with Different Denominators</h3>
+                    <p>When adding fractions with different denominators:</p>
+                    <ol>
+                        <li>Find the Least Common Multiple (LCM) of the denominators</li>
+                        <li>Convert each fraction to an equivalent fraction with this common denominator</li>
+                        <li>Add the numerators and keep the common denominator</li>
+                        <li>Simplify if needed</li>
+                    </ol>
+                    <div class="operation-example">
+                        <div class="fraction-example">
+                            <span class="numerator">1</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">2</span>
+                        </div>
+                        <span class="operation-symbol">+</span>
+                        <div class="fraction-example">
+                            <span class="numerator">1</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">3</span>
+                        </div>
+                        <span class="equals-symbol">=</span>
+                        <div class="fraction-example">
+                            <span class="numerator">3</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">6</span>
+                        </div>
+                        <span class="operation-symbol">+</span>
+                        <div class="fraction-example">
+                            <span class="numerator">2</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">6</span>
+                        </div>
+                        <span class="equals-symbol">=</span>
+                        <div class="fraction-example">
+                            <span class="numerator">5</span>
+                            <span class="fraction-line" aria-hidden="true"></span>
+                            <span class="denominator">6</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="real-life" class="content-section" tabindex="0" aria-labelledby="real-life-heading">
+                <h2 id="real-life-heading">Real-Life Examples</h2>
+                
+                <div class="example-box">
+                    <h3>Fractions in Everyday Life</h3>
+                    <ul>
+                        <li><strong>Food:</strong> When we divide a chapati into 4 equal parts, each part is 1/4 of the chapati</li>
+                        <li><strong>Time:</strong> 30 minutes is 1/2 of an hour, 15 minutes is 1/4 of an hour</li>
+                        <li><strong>Money:</strong> 50 paise is 1/2 of a rupee</li>
+                        <li><strong>Measurement:</strong> 500 ml is 1/2 of a litre</li>
+                    </ul>
+                </div>
+                
+                <div class="problem-box">
+                    <h3>Word Problems</h3>
+                    
+                    <div class="problem">
+                        <h4>Problem 1:</h4>
+                        <p>Reena ate 1/4 of a pizza, and her brother Rahul ate 2/4 of the same pizza. How much pizza did they eat altogether?</p>
+                        <div class="solution" tabindex="0">
+                            <p><strong>Solution:</strong></p>
+                            <p>Reena ate 1/4 of the pizza.</p>
+                            <p>Rahul ate 2/4 of the pizza.</p>
+                            <p>Total pizza eaten = 1/4 + 2/4 = 3/4</p>
+                            <p>They ate 3/4 of the pizza altogether.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="problem">
+                        <h4>Problem 2:</h4>
+                        <p>Aarav had 1/2 metre of ribbon. He used 1/4 metre to make a bookmark. How much ribbon does he have left?</p>
+                        <div class="solution" tabindex="0">
+                            <p><strong>Solution:</strong></p>
+                            <p>Aarav had 1/2 metre of ribbon.</p>
+                            <p>He used 1/4 metre for the bookmark.</p>
+                            <p>Ribbon left = 1/2 - 1/4</p>
+                            <p>To subtract, we need the same denominators.</p>
+                            <p>1/2 = 2/4</p>
+                            <p>So, 2/4 - 1/4 = 1/4</p>
+                            <p>Aarav has 1/4 metre of ribbon left.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="practice-box">
+                    <h3>Practice Questions</h3>
+                    <ol>
+                        <li>What fraction of a day is 6 hours?</li>
+                        <li>If you divide a chocolate bar into 8 equal pieces and eat 3 pieces, what fraction of the chocolate did you eat?</li>
+                        <li>Maya has read 2/5 of her book, and Sanya has read 1/5 of the same book. Who has read more and by what fraction?</li>
+                        <li>Write 3/8 and 5/8 in order from smallest to largest.</li>
+                        <li>Find the sum: 1/6 + 2/6 + 3/6</li>
+                    </ol>
+                </div>
+            </section>
+            
+            <section id="self-assessment" class="content-section" tabindex="0" aria-labelledby="assessment-heading">
+                <h2 id="assessment-heading">Self-Assessment</h2>
+                
+                <p>Let's check your understanding with a short quiz:</p>
+                
+                <div class="quiz-container">
+                    <div class="quiz-question" data-question-id="1">
+                        <p><strong>Question 1:</strong> What is 1/3 + 1/3?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false">1/6</button>
+                            <button class="quiz-option" data-correct="true">2/3</button>
+                            <button class="quiz-option" data-correct="false">3/3</button>
+                            <button class="quiz-option" data-correct="false">1/9</button>
+                        </div>
+                        <div class="quiz-feedback" aria-live="polite"></div>
+                    </div>
+                    
+                    <div class="quiz-question" data-question-id="2">
+                        <p><strong>Question 2:</strong> Which fraction is larger: 2/5 or 3/8?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true">2/5</button>
+                            <button class="quiz-option" data-correct="false">3/8</button>
+                            <button class="quiz-option" data-correct="false">They are equal</button>
+                        </div>
+                        <div class="quiz-feedback" aria-live="polite"></div>
+                    </div>
+                    
+                    <div class="quiz-question" data-question-id="3">
+                        <p><strong>Question 3:</strong> What is 1/2 of 12?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false">4</button>
+                            <button class="quiz-option" data-correct="true">6</button>
+                            <button class="quiz-option" data-correct="false">8</button>
+                            <button class="quiz-option" data-correct="false">24</button>
+                        </div>
+                        <div class="quiz-feedback" aria-live="polite"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <footer role="contentinfo">
+        <div class="container">
+            <p>&copy; 2024 NCERT-Aligned Mathematics | Accessible Education Initiative</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Accessibility Statement</a>
+                <a href="#" class="footer-link">Contact Support</a>
+                <a href="#" class="footer-link">Teacher Resources</a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="keyboard-shortcuts" id="keyboardShortcuts" tabindex="-1" role="dialog" aria-labelledby="shortcuts-heading">
+        <div class="shortcuts-content">
+            <h2 id="shortcuts-heading">Keyboard Shortcuts</h2>
+            <button class="close-btn" id="closeShortcuts" aria-label="Close keyboard shortcuts">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+            <ul class="shortcuts-list">
+                <li><kbd>Right Arrow</kbd> or <kbd>N</kbd>: Next section</li>
+                <li><kbd>Left Arrow</kbd> or <kbd>P</kbd>: Previous section</li>
+                <li><kbd>Space</kbd>: Read current section</li>
+                <li><kbd>Esc</kbd>: Stop reading / Close dialogs</li>
+                <li><kbd>A</kbd>: Open assistant</li>
+                <li><kbd>H</kbd>: Show this help</li>
+                <li><kbd>+</kbd>: Increase font size</li>
+                <li><kbd>-</kbd>: Decrease font size</li>
+                <li><kbd>C</kbd>: Toggle high contrast</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Keyboard shortcut help button -->
+    <button class="keyboard-help-button" id="showKeyboardShortcuts" aria-label="Show keyboard shortcuts">
+        <i class="fas fa-keyboard" aria-hidden="true"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
