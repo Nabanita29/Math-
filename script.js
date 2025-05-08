@@ -368,7 +368,7 @@ function redirectToAssignment() {
     // Add a small delay before redirecting to allow the speech to be heard
     setTimeout(() => {
         // Use the placeholder URL you provided
-        window.location.href = "https://www.mathsisfun.com/";
+        window.location.href = "quiz.html";
     }, 2000); // 2-second delay
 }
 
