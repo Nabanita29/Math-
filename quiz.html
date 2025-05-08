@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive Quiz on Fractions</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 30px;
+      color: #f8fafc;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    #quiz-container {
+      background-color: #1e293b;
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 960px;
+      margin: 0 auto;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+      text-align: center;
+    }
+
+    .badge {
+      background-color: #0ea5e9;
+      color: #fff;
+      padding: 5px 12px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      position: absolute;
+      top: -10px;
+      right: -10px;
+    }
+
+    .main {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    .content {
+      flex: 2;
+      min-width: 280px;
+    }
+
+    .quiz-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .fraction-visualizer {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .fraction-card {
+      background-color: #1e293b;
+      border: 2px solid #38bdf8;
+      border-radius: 16px;
+      padding: 20px;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #f1f5f9;
+      font-weight: bold;
+      font-size: 18px;
+      text-align: center;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s ease;
+    }
+
+    .fraction-card:hover {
+      transform: scale(1.06);
+      background-color: #334155;
+    }
+
+    button, .options {
+      background-color: #0ea5e9;
+      color: #f0f9ff;
+      border: none;
+      padding: 12px 24px;
+      margin: 12px 8px 0;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    button:hover, .options:hover {
+      background-color: #0284c7;
+      transform: translateY(-2px);
+    }
+
+    .options {
+      background-color: #334155;
+      display: block;
+      width: 100%;
+      max-width: 400px;
+      margin: 10px auto;
+      text-align: center;
+      border: 1px solid transparent;
+    }
+
+    .options:hover {
+      border-color: #38bdf8;
+    }
+
+    #feedback {
+      margin-top: 20px;
+      font-weight: 500;
+      color: #22c55e;
+      text-align: center;
+    }
+
+    .sidebar {
+      flex: 1;
+      min-width: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .info-block {
+      background-color: #334155;
+      padding: 16px;
+      margin-bottom: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .info-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .info-content {
+      font-size: 18px;
+      font-weight: bold;
+      color: #38bdf8;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Interactive Quiz on Fractions</h1>
+
+  <div id="quiz-container">
+    <div class="badge">Quiz</div>
+    <div class="main">
+      <div class="content">
+        <div class="quiz-title">Test Your Knowledge</div>
+
+        <div class="fraction-visualizer">
+          <div class="fraction-card">🟦<br>Whole<br>(1/1)</div>
+          <div class="fraction-card">🔷<br>Half<br>(1/2)</div>
+          <div class="fraction-card">◼️<br>Quarter<br>(1/4)</div>
+        </div>
+
+        <button id="start-btn" onclick="startQuiz()">Start Quiz</button>
+
+        <div id="question-container" style="display:none;">
+          <div id="question" class="question" style="margin-bottom: 20px; font-size: 18px;"></div>
+          <div id="option1" class="options" onclick="checkAnswer('A')"></div>
+          <div id="option2" class="options" onclick="checkAnswer('B')"></div>
+          <div id="feedback" class="feedback"></div>
+        </div>
+
+      </div>
+      <div class="sidebar">
+        <div class="info-block">
+          <div class="info-title">Difficulty</div>
+          <div class="info-content">Easy</div>
+        </div>
+        <div class="info-block">
+          <div class="info-title">Max Score</div>
+          <div class="info-content">10</div>
+        </div>
+      </div>
+    </div>
+
+
+  <!-- Sounds -->
+  <audio id="correct-sound" class="audio-feedback" src="correct-answer.mp3"></audio>
+  <audio id="wrong-sound" class="audio-feedback" src="wrong-answer.mp3"></audio>
+  <audio id="success-sound" class="audio-feedback" src="success.mp3"></audio>
+
+  <script>
+  const questions = [
+    {
+      question: "If you have 3/5 of a cake and eat 2/5 of it, how much is left?",
+      options: { "A": "1/5", "B": "3/5" },
+      correct: "A",
+      explanation: "You start with 3/5 and eat 2/5, so 3/5 minus 2/5 equals 1/5."
+    },
+    {
+      question: "If you add 2/3 of a cup of flour to 3/6 of a cup of flour, what is the total amount?",
+      options: { "A": "1", "B": "7/6" },
+      correct: "B",
+      explanation: "3/6 is the same as 1/2. Adding 2/3 and 1/2 gives 7/6."
+    },
+    {
+      question: "You have 5/8 of a pizza, and you give away 3/8. How much pizza do you have left?",
+      options: { "A": "1/4", "B": "1/8" },
+      correct: "A",
+      explanation: "5/8 minus 3/8 equals 2/8, which simplifies to 1/4."
+    },
+    {
+      question: "You are baking a cake and need 4/9 of a cup of sugar. If you add 1/3 more, how much sugar do you have?",
+      options: { "A": "7/9", "B": "5/9" },
+      correct: "A",
+      explanation: "1/3 is equal to 3/9. 4/9 plus 3/9 equals 7/9."
+    },
+    {
+      question: "If you multiply 1/2 of a recipe by 3/4, how much of the recipe do you have?",
+      options: { "A": "3/8", "B": "2/8" },
+      correct: "A",
+      explanation: "1/2 times 3/4 equals 3/8."
+    },
+    {
+      question: "If you divide 3/7 by 2/5, what is the result?",
+      options: { "A": "15/14", "B": "7/10" },
+      correct: "A",
+      explanation: "Dividing by a fraction means multiplying by its reciprocal. 3/7 ÷ 2/5 is 3/7 × 5/2 = 15/14."
+    },
+    {
+      question: "You are cutting a pie into 9 equal pieces, and you give away 2/3 of the pie. How much is left?",
+      options: { "A": "1/3", "B": "6/9" },
+      correct: "A",
+      explanation: "2/3 of 9 pieces is 6 pieces. That leaves 3 out of 9, which is 1/3."
+    }
+  ];
+  
+
+    let currentQuestionIndex = 0;
+    let correctCount = 0;
+    let quizStarted = false;
+
+    function startQuiz() {
+      if (quizStarted) return;
+      quizStarted = true;
+      currentQuestionIndex = 0;
+      correctCount = 0;
+
+      // Speech synthesis for introduction
+      const synth = window.speechSynthesis;
+      const intro = new SpeechSynthesisUtterance("Welcome to the fractions quiz! You will hear each question. Just say A or B to answer. Let's begin.");
+      
+      intro.onend = () => {
+        askQuestion();
+      };
+
+      synth.speak(intro);
+      document.getElementById("start-btn").style.display = "none";
+      document.getElementById("question-container").style.display = "block";
+    }
+
+    function askQuestion() {
+      if (currentQuestionIndex < questions.length) {
+        document.getElementById("feedback").innerText = "";
+        const q = questions[currentQuestionIndex];
+        document.getElementById("question").innerText = q.question;
+        document.getElementById("option1").innerText = `A) ${q.options["A"]}`;
+        document.getElementById("option2").innerText = `B) ${q.options["B"]}`;
+
+        const questionText = `Question ${currentQuestionIndex + 1}. ${q.question}. Option A is ${q.options["A"]}. Option B is ${q.options["B"]}. Say A or B to answer.`;
+        const questionUtterance = new SpeechSynthesisUtterance(questionText);
+        questionUtterance.rate = 0.8;
+
+        questionUtterance.onend = () => {
+          listenForAnswer();
+        };
+
+        window.speechSynthesis.speak(questionUtterance);
+      } else {
+        displayScoreAndBadge();
+      }
+    }
+
+    function listenForAnswer(retryCount = 0) {
+  if (recognition) recognition.abort();
+
+  recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.continuous = false;
+
+  const feedbackEl = document.getElementById("feedback");
+  feedbackEl.innerText = "Listening... Please say A or B.";
+
+  let responseReceived = false;
+
+  // Limit to max 2 retries
+  const MAX_RETRIES = 2;
+  const LISTEN_TIMEOUT = 7000;
+
+  let listenTimeout = setTimeout(() => {
+    if (!responseReceived) {
+      recognition.abort();
+      if (retryCount < MAX_RETRIES) {
+        feedbackEl.innerText = "Didn't catch that. Please try again.";
+        const utterance = new SpeechSynthesisUtterance("I didn't hear that clearly. Please say A or B after the beep.");
+        utterance.rate = 0.9;
+        utterance.onend = () => {
+          setTimeout(() => listenForAnswer(retryCount + 1), 1000);
+        };
+        window.speechSynthesis.speak(utterance);
+      } else {
+        feedbackEl.innerText = "No response received. Moving to next question.";
+        const utterance = new SpeechSynthesisUtterance("Let's move to the next question.");
+        utterance.rate = 0.9;
+        utterance.onend = () => {
+          setTimeout(() => {
+            currentQuestionIndex++;
+            askQuestion();
+          }, 1000);
+        };
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+  }, LISTEN_TIMEOUT);
+
+  recognition.onresult = function (event) {
+    clearTimeout(listenTimeout);
+    responseReceived = true;
+
+    const transcript = event.results[0][0].transcript.trim().toLowerCase();
+    console.log("User said:", transcript);
+
+    const isA = ['a', 'hey', 'ay', 'ei'].some(w => transcript.includes(w));
+    const isB = ['b', 'bee', 'be', 'beta'].some(w => transcript.includes(w));
+
+    if (isA) {
+      recognition.abort();
+      checkAnswer('A');
+    } else if (isB) {
+      recognition.abort();
+      checkAnswer('B');
+    } else {
+      feedbackEl.innerText = "Unrecognized answer. Please say A or B.";
+      const utterance = new SpeechSynthesisUtterance("I heard something else. Please say A or B after the beep.");
+      utterance.rate = 0.9;
+      utterance.onend = () => {
+        setTimeout(() => listenForAnswer(retryCount + 1), 1000);
+      };
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  recognition.onerror = function (e) {
+    clearTimeout(listenTimeout);
+    responseReceived = false;
+    recognition.abort();
+    console.error("Speech recognition error:", e);
+
+    if (retryCount < MAX_RETRIES) {
+      feedbackEl.innerText = "Speech error. Retrying...";
+      const utterance = new SpeechSynthesisUtterance("There was a problem hearing you. Let's try again.");
+      utterance.rate = 0.9;
+      utterance.onend = () => {
+        setTimeout(() => listenForAnswer(retryCount + 1), 1000);
+      };
+      window.speechSynthesis.speak(utterance);
+    } else {
+      feedbackEl.innerText = "Too many errors. Skipping to next question.";
+      const utterance = new SpeechSynthesisUtterance("Too many errors. Let's go to the next question.");
+      utterance.rate = 0.9;
+      utterance.onend = () => {
+        setTimeout(() => {
+          currentQuestionIndex++;
+          askQuestion();
+        }, 1000);
+      };
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  recognition.start();
+}
+
+
+  function checkAnswer(selectedOption) {
+  const q = questions[currentQuestionIndex];
+  const isCorrect = selectedOption === q.correct;
+  if (isCorrect) correctCount++;
+
+  const feedbackText = isCorrect ? "Correct!" : "Wrong answer.";
+  const explanationText = `The correct answer is ${q.correct}, which is ${q.options[q.correct]}. ${q.explanation}`;
+
+  const sound = isCorrect ? document.getElementById("correct-sound") : document.getElementById("wrong-sound");
+  sound.play();
+
+  document.getElementById("feedback").innerText = `${feedbackText} ${explanationText}`;
+
+  const feedbackUtterance = new SpeechSynthesisUtterance(`${feedbackText} ${explanationText}`);
+  feedbackUtterance.rate = 0.9;
+
+  feedbackUtterance.onend = () => {
+    const randomEncouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+    const encouragementUtterance = new SpeechSynthesisUtterance(randomEncouragement);
+    encouragementUtterance.rate = 0.9;
+    encouragementUtterance.onend = () => {
+      currentQuestionIndex++;
+      setTimeout(askQuestion, 1000);
+    };
+    window.speechSynthesis.speak(encouragementUtterance);
+  };
+
+  window.speechSynthesis.speak(feedbackUtterance);
+}
+
+
+  function displayScoreAndBadge() {
+      document.getElementById("quiz-container").innerHTML = "<h2>Quiz Completed!</h2>";
+
+      // Determine the badge based on score
+      let badgeClass = '';
+      let badgeText = '';
+      if (correctCount === 7) {
+        badgeClass = 'gold';
+        badgeText = 'Gold Badge 🥇';
+      } else if (correctCount >= 5) {
+        badgeClass = 'silver';
+        badgeText = 'Silver Badge 🥈';
+      } else if (correctCount >= 3) {
+        badgeClass = 'bronze';
+        badgeText = 'Bronze Badge 🥉';
+      }
+
+      if (badgeClass) {
+        const badge = document.createElement("div");
+        badge.className = `earned-badge ${badgeClass}`;
+        badge.textContent = `You earned a ${badgeText}`;
+        document.getElementById("quiz-container").appendChild(badge);
+      }
+
+      // Announce final score and badge
+      const finalMessage = `You answered ${correctCount} questions correctly. You earned a ${badgeText}.`;
+      const finalSpeech = new SpeechSynthesisUtterance(finalMessage);
+      finalSpeech.rate = 0.85;
+      window.speechSynthesis.speak(finalSpeech);
+
+      document.getElementById("success-sound").play();
+    }
+
+    const encouragements = [
+      "Great job! Keep it up!",
+      "You're doing fantastic! Keep going!",
+      "Well done! You're on the right track!"
+    ];
+
+    let recognition; // Declare recognition globally
+    function listenForQuizCommand() {
+      const commandRecog = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      commandRecog.lang = 'en-US';
+      commandRecog.continuous = true;
+      commandRecog.interimResults = false;
+      commandRecog.start();
+
+      commandRecog.onresult = function(event) {
+        const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
+        if (transcript.includes("quiz") && !quizStarted) {
+          commandRecog.stop();
+          startQuiz();
+        }
+      };
+
+      commandRecog.onerror = function(event) {
+        console.error("Speech recognition error:", event.error);
+        setTimeout(listenForQuizCommand, 3000);
+      };
+    }
+
+    window.onload = () => {
+      listenForQuizCommand();
+    };
+  </script>
+</body>
+</html>
