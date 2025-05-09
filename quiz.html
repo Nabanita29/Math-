@@ -254,7 +254,7 @@
   ];
   
 
-    let currentQuestionIndex = 0;
+  let currentQuestionIndex = 0;
     let correctCount = 0;
     let quizStarted = false;
 
@@ -299,140 +299,82 @@
       }
     }
 
-    function listenForAnswer(retryCount = 0) {
-  if (recognition) recognition.abort();
+    function listenForAnswer() {
+      if (recognition) recognition.stop();
 
-  recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-  recognition.lang = 'en-US';
-  recognition.interimResults = false;
-  recognition.continuous = false;
+      recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.continuous = false;
 
-  const feedbackEl = document.getElementById("feedback");
-  feedbackEl.innerText = "Listening... Please say A or B.";
+      document.getElementById("feedback").innerText = "Listening... Please say A or B.";
+      recognition.start();
 
-  let responseReceived = false;
+      recognition.onresult = function(event) {
+        const rawTranscript = event.results[0][0].transcript.trim().toLowerCase();
 
-  // Limit to max 2 retries
-  const MAX_RETRIES = 2;
-  const LISTEN_TIMEOUT = 7000;
-
-  let listenTimeout = setTimeout(() => {
-    if (!responseReceived) {
-      recognition.abort();
-      if (retryCount < MAX_RETRIES) {
-        feedbackEl.innerText = "Didn't catch that. Please try again.";
-        const utterance = new SpeechSynthesisUtterance("I didn't hear that clearly. Please say A or B after the beep.");
-        utterance.rate = 0.9;
-        utterance.onend = () => {
-          setTimeout(() => listenForAnswer(retryCount + 1), 1000);
-        };
-        window.speechSynthesis.speak(utterance);
-      } else {
-        feedbackEl.innerText = "No response received. Moving to next question.";
-        const utterance = new SpeechSynthesisUtterance("Let's move to the next question.");
-        utterance.rate = 0.9;
-        utterance.onend = () => {
-          setTimeout(() => {
-            currentQuestionIndex++;
-            askQuestion();
-          }, 1000);
-        };
-        window.speechSynthesis.speak(utterance);
-      }
-    }
-  }, LISTEN_TIMEOUT);
-
-  recognition.onresult = function (event) {
-    clearTimeout(listenTimeout);
-    responseReceived = true;
-
-    const transcript = event.results[0][0].transcript.trim().toLowerCase();
-    console.log("User said:", transcript);
-
-    const isA = ['a', 'hey', 'ay', 'ei'].some(w => transcript.includes(w));
-    const isB = ['b', 'bee', 'be', 'beta'].some(w => transcript.includes(w));
-
-    if (isA) {
-      recognition.abort();
-      checkAnswer('A');
-    } else if (isB) {
-      recognition.abort();
-      checkAnswer('B');
-    } else {
-      feedbackEl.innerText = "Unrecognized answer. Please say A or B.";
-      const utterance = new SpeechSynthesisUtterance("I heard something else. Please say A or B after the beep.");
-      utterance.rate = 0.9;
-      utterance.onend = () => {
-        setTimeout(() => listenForAnswer(retryCount + 1), 1000);
+        if (rawTranscript.includes('a')) {
+          recognition.stop();
+          checkAnswer('A');
+        } else if (rawTranscript.includes('b')) {
+          recognition.stop();
+          checkAnswer('B');
+        } else {
+          document.getElementById("feedback").innerText = "Didn't catch that. Please say A or B.";
+          const repeatUtterance = new SpeechSynthesisUtterance("Let's try again. Please say A or B.");
+          repeatUtterance.rate = 0.9;
+          window.speechSynthesis.speak(repeatUtterance);
+          setTimeout(() => askQuestion(), 4000);
+        }
       };
-      window.speechSynthesis.speak(utterance);
-    }
-  };
 
-  recognition.onerror = function (e) {
-    clearTimeout(listenTimeout);
-    responseReceived = false;
-    recognition.abort();
-    console.error("Speech recognition error:", e);
-
-    if (retryCount < MAX_RETRIES) {
-      feedbackEl.innerText = "Speech error. Retrying...";
-      const utterance = new SpeechSynthesisUtterance("There was a problem hearing you. Let's try again.");
-      utterance.rate = 0.9;
-      utterance.onend = () => {
-        setTimeout(() => listenForAnswer(retryCount + 1), 1000);
+      recognition.onerror = function(e) {
+        document.getElementById("feedback").innerText = "Error occurred. Repeating question.";
+        const repeatUtterance = new SpeechSynthesisUtterance("There was an error. Let's repeat the question.");
+        repeatUtterance.rate = 0.9;
+        window.speechSynthesis.speak(repeatUtterance);
+        setTimeout(() => askQuestion(), 4000);
       };
-      window.speechSynthesis.speak(utterance);
-    } else {
-      feedbackEl.innerText = "Too many errors. Skipping to next question.";
-      const utterance = new SpeechSynthesisUtterance("Too many errors. Let's go to the next question.");
-      utterance.rate = 0.9;
-      utterance.onend = () => {
-        setTimeout(() => {
+    }
+
+    function checkAnswer(selectedOption) {
+      const q = questions[currentQuestionIndex];
+      const isCorrect = selectedOption === q.correct;
+      if (isCorrect) correctCount++;
+
+      const feedbackText = isCorrect ? "Correct!" : "Wrong answer.";
+      const explanationText = `The correct answer is ${q.correct}, which is ${q.options[q.correct]}. ${q.explanation}`;
+
+      const sound = isCorrect ? document.getElementById("correct-sound") : document.getElementById("wrong-sound");
+      sound.play();
+
+      document.getElementById("feedback").innerText = `${feedbackText} ${explanationText}`;
+
+      const feedbackUtterance = new SpeechSynthesisUtterance(`${feedbackText}. ${explanationText}`);
+      feedbackUtterance.rate = 0.9;
+
+      const explanationUtterance = new SpeechSynthesisUtterance(explanationText);
+      explanationUtterance.rate = 0.9;
+
+      feedbackUtterance.onend = () => {
+        window.speechSynthesis.speak(explanationUtterance);
+      };
+
+      explanationUtterance.onend = () => {
+        const randomEncouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+        const encouragementUtterance = new SpeechSynthesisUtterance(randomEncouragement);
+        encouragementUtterance.rate = 0.9;
+        encouragementUtterance.onend = () => {
           currentQuestionIndex++;
-          askQuestion();
-        }, 1000);
+          setTimeout(askQuestion, 1000);
+        };
+        window.speechSynthesis.speak(encouragementUtterance);
       };
-      window.speechSynthesis.speak(utterance);
+
+      window.speechSynthesis.speak(feedbackUtterance);
     }
-  };
 
-  recognition.start();
-}
-
-
-  function checkAnswer(selectedOption) {
-  const q = questions[currentQuestionIndex];
-  const isCorrect = selectedOption === q.correct;
-  if (isCorrect) correctCount++;
-
-  const feedbackText = isCorrect ? "Correct!" : "Wrong answer.";
-  const explanationText = `The correct answer is ${q.correct}, which is ${q.options[q.correct]}. ${q.explanation}`;
-
-  const sound = isCorrect ? document.getElementById("correct-sound") : document.getElementById("wrong-sound");
-  sound.play();
-
-  document.getElementById("feedback").innerText = `${feedbackText} ${explanationText}`;
-
-  const feedbackUtterance = new SpeechSynthesisUtterance(`${feedbackText} ${explanationText}`);
-  feedbackUtterance.rate = 0.9;
-
-  feedbackUtterance.onend = () => {
-    const randomEncouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
-    const encouragementUtterance = new SpeechSynthesisUtterance(randomEncouragement);
-    encouragementUtterance.rate = 0.9;
-    encouragementUtterance.onend = () => {
-      currentQuestionIndex++;
-      setTimeout(askQuestion, 1000);
-    };
-    window.speechSynthesis.speak(encouragementUtterance);
-  };
-
-  window.speechSynthesis.speak(feedbackUtterance);
-}
-
-
-  function displayScoreAndBadge() {
+    function displayScoreAndBadge() {
       document.getElementById("quiz-container").innerHTML = "<h2>Quiz Completed!</h2>";
 
       // Determine the badge based on score
